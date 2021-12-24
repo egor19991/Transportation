@@ -16,7 +16,7 @@ namespace Transportation
         {
             InitializeComponent();
             string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=usersdb;Integrated Security=True";
-            Console.WriteLine(connectionString);
+            Console.WriteLine(connectionString);//dd
         }
     }
 }
