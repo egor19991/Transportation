@@ -63,20 +63,20 @@ namespace Transportation
                 connection.Open();
                 adapter = new SqlDataAdapter(sql, connection);
                 commandBuilder = new SqlCommandBuilder(adapter);
-                adapter.InsertCommand = new SqlCommand("Fizе", connection);
+                adapter.InsertCommand = new SqlCommand("sp_Fiz", connection);
                 adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("Surnames", SqlDbType.NVarChar, 30, "Surnames"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("Names", SqlDbType.NVarChar, 30, "Names"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("Patronymic", SqlDbType.NVarChar, 30, "Patronymic"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("PhoneNumber", SqlDbType.NVarChar, 11, "PhoneNumber"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("ResidenceAddress", SqlDbType.NVarChar, 100, "ResidenceAddress"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("SeriesPassportNumber", SqlDbType.NVarChar, 10, "SeriesPassportNumber"));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@surnames", SqlDbType.Char, 30, "Surnames"));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@names", SqlDbType.Char, 30, "Names"));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@patronymic", SqlDbType.Char, 30, "Patronymic"));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@phoneNumber", SqlDbType.Char, 11, "PhoneNumber"));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@residenceAddress", SqlDbType.Char, 100, "ResidenceAddress"));
+                adapter.InsertCommand.Parameters.Add(new SqlParameter("@seriesPassportNumber", SqlDbType.Char, 10, "SeriesPassportNumber"));
                 //adapter.InsertCommand.Parameters.Add(new SqlParameter("@name", SqlDbType.NVarChar, 30, "Names"));
                 //adapter.InsertCommand.Parameters.Add(new SqlParameter("@name", SqlDbType.NVarChar, 30, "Names"));
 
 
 
-                SqlParameter parameter = adapter.InsertCommand.Parameters.Add("IDFiz", SqlDbType.Int, 0, "IDFiz");
+                SqlParameter parameter = adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int,0, "IDFiz");
                 parameter.Direction = ParameterDirection.Output;
 
                 adapter.Update(ds);
