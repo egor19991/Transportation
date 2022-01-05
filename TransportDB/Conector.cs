@@ -68,27 +68,189 @@ namespace TransportDB
             get { return _ds; }
         }
 
-        public void SaveInformation(ListEntities entities)
+        public void SaveInformation(ListEntities entitie)
         {
             _commandBuilder = new SqlCommandBuilder(_adapter);
-            _adapter.InsertCommand = new SqlCommand("sp_Fiz", _connection);
-            _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
-            _adapter.InsertCommand.Parameters.Add(new SqlParameter("@surnames", SqlDbType.Char, 30, "Surnames"));
-            _adapter.InsertCommand.Parameters.Add(new SqlParameter("@names", SqlDbType.Char, 30, "Names"));
-            _adapter.InsertCommand.Parameters.Add(new SqlParameter("@patronymic", SqlDbType.Char, 30, "Patronymic"));
-            _adapter.InsertCommand.Parameters.Add(new SqlParameter("@phoneNumber", SqlDbType.Char, 11, "PhoneNumber"));
-            _adapter.InsertCommand.Parameters.Add(new SqlParameter("@residenceAddress", SqlDbType.Char, 100, "ResidenceAddress"));
-            _adapter.InsertCommand.Parameters.Add(new SqlParameter("@seriesPassportNumber", SqlDbType.Char, 10, "SeriesPassportNumber"));
-            SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0, "IDFiz");
-            parameter.Direction = ParameterDirection.Output;
-
-            _adapter.Update(_ds);
-          
-
+            switch (entitie)
+            {
+                case ListEntities.Fiz:
+                    {
+                        _adapter.InsertCommand = new SqlCommand("sp_Fiz", _connection);
+                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@surnames", SqlDbType.Char, 30, "Surnames"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@names", SqlDbType.Char, 30, "Names"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@patronymic", SqlDbType.Char, 30, "Patronymic"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@phoneNumber", SqlDbType.Char, 11, "PhoneNumber"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@residenceAddress", SqlDbType.Char, 100, "ResidenceAddress"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@seriesPassportNumber", SqlDbType.Char, 10, "SeriesPassportNumber"));
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0, "IDFiz");
+                        parameter.Direction = ParameterDirection.Output;
+                        _adapter.Update(_ds);
+                        break;
+                    }
+                case ListEntities.Entity:
+                    {
+                        _adapter.InsertCommand = new SqlCommand("sp_Entity", _connection);
+                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@namesOrganization", SqlDbType.Char, 100, "NamesOrganization"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@legalAddress", SqlDbType.Char, 100, "LegalAddress"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@INN", SqlDbType.Char, 12, "INN"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@KPP", SqlDbType.Char, 9, "KPP"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@namesBank", SqlDbType.Char, 100, "NamesBank"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@BIK", SqlDbType.Char, 9, "BIK"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@paymentAccount", SqlDbType.Char, 20, "PaymentAccount"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@corporateAccount", SqlDbType.Char, 20, "CorporateAccount"));
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0, "IDEntitys");
+                        parameter.Direction = ParameterDirection.Output;
+                        _adapter.Update(_ds);
+                        break;
+                    }
+                case ListEntities.Route:
+                    {
+                        _adapter.InsertCommand = new SqlCommand("sp_Route", _connection);
+                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@pointDeparture", SqlDbType.Char, 70, "PointDeparture"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@destination", SqlDbType.Char, 70, "Destination"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@distance", SqlDbType.Float, 0, "Distance"));
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0, "IDRoute");
+                        parameter.Direction = ParameterDirection.Output;
+                        _adapter.Update(_ds);
+                        break;
+                    }
+                case ListEntities.Employee:
+                    {
+                        _adapter.InsertCommand = new SqlCommand("sp_Employee", _connection);
+                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@surnames", SqlDbType.Char, 30, "Surnames"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@names", SqlDbType.Char, 30, "Names"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@patronymic", SqlDbType.Char, 30, "Patronymic"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@dateBirth", SqlDbType.Date, 0, "DateBirth"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@INN", SqlDbType.Char, 12, "INN"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@SNILS", SqlDbType.Char, 11, "SNILS"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@position", SqlDbType.Char, 50, "Position"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@seriesPassportNumber", SqlDbType.Char, 10, "SeriesPassportNumber"));
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0, "IDEmployee");
+                        parameter.Direction = ParameterDirection.Output;
+                        _adapter.Update(_ds);
+                        break;
+                    }
+                case ListEntities.CargoType:
+                    {
+                        _adapter.InsertCommand = new SqlCommand("sp_CargoType", _connection);
+                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@cargoType", SqlDbType.Char, 70, "CargoType"));
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0, "IDTypeCargo");
+                        parameter.Direction = ParameterDirection.Output;
+                        _adapter.Update(_ds);
+                        break;
+                    }
+                case ListEntities.Vehicle:
+                    {
+                        _adapter.InsertCommand = new SqlCommand("sp_Vehicle", _connection);
+                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDTypeCargo", SqlDbType.Int, 0, "IDTypeCargo"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@vehicleType", SqlDbType.Char, 50, "VehicleType"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@maxVolume", SqlDbType.Float, 0, "MaxVolume"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@weightLimit", SqlDbType.Float, 0, "WeightLimit"));
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0, "IDVehicle");
+                        parameter.Direction = ParameterDirection.Output;
+                        _adapter.Update(_ds);
+                        break;
+                    }
+                case ListEntities.Flight:
+                    {
+                        _adapter.InsertCommand = new SqlCommand("sp_Flight", _connection);
+                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDVehicle", SqlDbType.Int, 0, "IDVehicle"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDRoute", SqlDbType.Int, 0, "IDRoute"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@dateTimeDeparture", SqlDbType.DateTime, 0, "DateTimeDeparture"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@dateTimeArrival", SqlDbType.DateTime, 0, "DateTimeArrival"));
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0, "IDFlight");
+                        parameter.Direction = ParameterDirection.Output;
+                        _adapter.Update(_ds);
+                        break;
+                    }
+                case ListEntities.Rate:
+                    {
+                        _adapter.InsertCommand = new SqlCommand("sp_Rate", _connection);
+                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDTypeCargo", SqlDbType.Int, 0, "IDTypeCargo"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@loadDensity", SqlDbType.Float, 0, "LoadDensity"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@price", SqlDbType.Float, 0, "Price"));
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0, "IDRate");
+                        parameter.Direction = ParameterDirection.Output;
+                        _adapter.Update(_ds);
+                        break;
+                    }
+                case ListEntities.Orders:
+                    {
+                        _adapter.InsertCommand = new SqlCommand("sp_Orders", _connection);
+                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDTypeCargo", SqlDbType.Int, 0, "IDTypeCargo"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@cargoVolume", SqlDbType.Float, 0, "CargoVolume"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@cargoWeight", SqlDbType.Float, 0, "CargoWeight"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@shippingAddress", SqlDbType.Char, 100, "ShippingAddress"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@deliveryAddress", SqlDbType.Char, 100, "DeliveryAddress"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDRate", SqlDbType.Int, 0, "IDRate"));
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0, "IDOrders");
+                        parameter.Direction = ParameterDirection.Output;
+                        _adapter.Update(_ds);
+                        break;
+                    }
+                case ListEntities.RateFlight:
+                    {
+                        _adapter.InsertCommand = new SqlCommand("sp_RateFlight", _connection);
+                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDRate", SqlDbType.Int, 0, "IDRate"));
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@IDOrders", SqlDbType.Int, 0, "IDRate");
+                        _adapter.Update(_ds);
+                        break;
+                    }
+                case ListEntities.IssueOrders:
+                    {
+                        _adapter.InsertCommand = new SqlCommand("sp_IssueOrders", _connection);
+                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDEmployee", SqlDbType.Int, 0, "IDEmployee"));
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@IDOrders", SqlDbType.Int, 0, "IDRate");
+                        _adapter.Update(_ds);
+                        break;
+                    }
+                case ListEntities.AcceptanceOrders:
+                    {
+                        _adapter.InsertCommand = new SqlCommand("sp_AcceptanceOrders", _connection);
+                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDEmployee", SqlDbType.Int, 0, "IDEmployee"));
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@IDOrders", SqlDbType.Int, 0, "IDRate");
+                        _adapter.Update(_ds);
+                        break;
+                    }
+                case ListEntities.Sender:
+                    {
+                        _adapter.InsertCommand = new SqlCommand("sp_Sender", _connection);
+                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDFiz", SqlDbType.Int, 0, "IDFiz"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDEntitys", SqlDbType.Int, 0, "IDEntitys"));
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@IDOrders", SqlDbType.Int, 0, "IDOrders");
+                        _adapter.Update(_ds);
+                        break;
+                    }
+                case ListEntities.Recipient:
+                    {
+                        _adapter.InsertCommand = new SqlCommand("sp_Recipient", _connection);
+                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDFiz", SqlDbType.Int, 0, "IDFiz"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDEntitys", SqlDbType.Int, 0, "IDEntitys"));
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@IDOrders", SqlDbType.Int, 0, "IDOrders");
+                        _adapter.Update(_ds);
+                        break;
+                    }
+                default: break;
+            }
         }
 
-
-
+        /// <summary>
+        /// Конструктор класса, для инициализации словаря IdTableDictionary
+        /// </summary>
         public Conector()
         {
             _IdTableDictionary = new Dictionary<string, string>()
