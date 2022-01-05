@@ -87,5 +87,34 @@ namespace Transportation
                 dataGridView1.Columns[$"{_conector.IdTableDicionary[Table.ToString()]}"].ReadOnly = true;
             }
         }
+
+        private void SelectFizRecipientButton_Click(object sender, EventArgs e)
+        {
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.DataSource = _conector.SelectFizRecipient.Tables[0];
+        }
+
+        private void SelectFizSenderButton_Click(object sender, EventArgs e)
+        {
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.DataSource = _conector.SelectFizSender.Tables[0];
+        }
+
+        private void FizSender2Button_Click(object sender, EventArgs e)
+        {
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.DataSource = _conector.SelectFizSender2(FizSender2TextBox.Text).Tables[0];
+        }
+
+        private void SelectEmployeeAcceptanceOrdersButton_Click(object sender, EventArgs e)
+        {
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.DataSource = _conector.SelectEmployeeAcceptanceOrders(SurnameSelectEmployeeAcceptanceOrdersTextBox.Text,
+                namesSelectEmployeeAcceptanceOrdersTextBox.Text,patronymicSelectEmployeeAcceptanceOrdersTextBox.Text).Tables[0];
+        }
     }
 }

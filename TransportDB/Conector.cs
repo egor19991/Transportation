@@ -68,6 +68,52 @@ namespace TransportDB
             get { return _ds; }
         }
 
+        public DataSet SelectFizRecipient
+        {
+            get
+            {
+                string _sql = $"select R.IDFiz,F.Surnames,F.Names, COUNT(*) as NumberItems from Recipient" +
+                    $" R inner join Fiz F ON F.IDFiz = R.IDFiz group by cube(R.IDFiz, F.Surnames, F.Names)";
+                _adapter = new SqlDataAdapter(_sql, _connection);
+                _ds = new DataSet();
+                _adapter.Fill(_ds);
+                return _ds;
+            }
+        }
+
+        public DataSet SelectFizSender
+        {
+            get
+            {
+                string _sql = $"select S.IDFiz,F.Surnames,F.Names, COUNT(*) as NumberItems from Sender S " +
+                    $"inner join Fiz F ON F.IDFiz = S.IDFiz group by rollup(S.IDFiz,F.Surnames,F.Names)";
+                _adapter = new SqlDataAdapter(_sql, _connection);
+                _ds = new DataSet();
+                _adapter.Fill(_ds);
+                return _ds;
+            }
+        }
+
+        public DataSet SelectFizSender2(string surnames)
+        {
+            string _sql = $"select * from Fiz F left join Sender S " +
+                $"ON S.IDFiz = F.IDFiz WHERE F.Surnames = '{surnames}'";
+            _adapter = new SqlDataAdapter(_sql, _connection);
+            _ds = new DataSet();
+            _adapter.Fill(_ds);
+            return _ds;
+        }
+
+        public DataSet SelectEmployeeAcceptanceOrders(string surnames, string name, string patronymic)
+        {
+            string _sql = $"select * from Employee E left join AcceptanceOrders A ON A.IDEmployee = E.IDEmployee" +
+                $" WHERE (E.Surnames = '{surnames}') and (E.Names = '{name}') and (E.Patronymic = '{patronymic}')";
+            _adapter = new SqlDataAdapter(_sql, _connection);
+            _ds = new DataSet();
+            _adapter.Fill(_ds);
+            return _ds;
+        }
+
         public void SaveInformation(ListEntities entitie)
         {
             _commandBuilder = new SqlCommandBuilder(_adapter);
