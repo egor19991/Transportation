@@ -35,7 +35,7 @@ namespace Transportation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(884, 511);
+            this.ClientSize = new System.Drawing.Size(884, 461);
             this.MinimumSize = new System.Drawing.Size(900, 500);
             this.Name = "MainForm";
             this.Text = "MainForm";

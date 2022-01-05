@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using TransportDB;
 
 namespace Transportation
 {
@@ -17,70 +18,35 @@ namespace Transportation
         {
             InitializeComponent();
         }
+        private Conector _conector = new Conector();
 
-        DataSet ds;
-        SqlDataAdapter adapter;
-        SqlCommandBuilder commandBuilder;
-        string connectionString = @"Persist Security Info=False;User ID=sqlUser;Password=123;Initial Catalog=TransportnoyeAgentstvo;Network Address=192.168.0.2";
-        string sql = "SELECT * FROM Fiz";
+        public ListEntities Table { get; set; }
 
+        //private DataSet _ds;
 
         private void TableForm_Load(object sender, EventArgs e)
         {
+            Table = ListEntities.Fiz;
+            _conector.Conect(Table);
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.AllowUserToAddRows = false;
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            dataGridView1.DataSource = _conector.SelectInformation.Tables[0];
+            // делаем недоступным столбец id для изменения
+            if (_conector.IdTableDicionary.ContainsKey(Table.ToString()))
             {
-                connection.Open();
-                adapter = new SqlDataAdapter(sql, connection);
-
-                ds = new DataSet();
-                adapter.Fill(ds);
-                dataGridView1.DataSource = ds.Tables[0];
-                // делаем недоступным столбец id для изменения
-                dataGridView1.Columns["IDFiz"].ReadOnly = true;
-
-                //for (int i = 0; i <= dataGridView1.Columns.Count - 1; i++)
-                //{
-                //    dataGridView1.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                //}
+                dataGridView1.Columns[$"{_conector.IdTableDicionary[Table.ToString()]}"].ReadOnly = true;
             }
         }
 
-        
-
         private void addButton_Click(object sender, EventArgs e)
         {
-            DataRow row = ds.Tables[0].NewRow(); // добавляем новую строку в DataTable
-            ds.Tables[0].Rows.Add(row);
+            DataRow row = _conector.SelectInformation.Tables[0].NewRow(); // добавляем новую строку в DataTable
+            _conector.SelectInformation.Tables[0].Rows.Add(row);
         }
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                adapter = new SqlDataAdapter(sql, connection);
-                commandBuilder = new SqlCommandBuilder(adapter);
-                adapter.InsertCommand = new SqlCommand("sp_Fiz", connection);
-                adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@surnames", SqlDbType.Char, 30, "Surnames"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@names", SqlDbType.Char, 30, "Names"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@patronymic", SqlDbType.Char, 30, "Patronymic"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@phoneNumber", SqlDbType.Char, 11, "PhoneNumber"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@residenceAddress", SqlDbType.Char, 100, "ResidenceAddress"));
-                adapter.InsertCommand.Parameters.Add(new SqlParameter("@seriesPassportNumber", SqlDbType.Char, 10, "SeriesPassportNumber"));
-                //adapter.InsertCommand.Parameters.Add(new SqlParameter("@name", SqlDbType.NVarChar, 30, "Names"));
-                //adapter.InsertCommand.Parameters.Add(new SqlParameter("@name", SqlDbType.NVarChar, 30, "Names"));
-
-
-
-                SqlParameter parameter = adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int,0, "IDFiz");
-                parameter.Direction = ParameterDirection.Output;
-
-                adapter.Update(ds);
-            }
+            _conector.SaveInformation(Table);
         }
 
         private void deleteButton_Click(object sender, EventArgs e)

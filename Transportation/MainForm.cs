@@ -23,40 +23,17 @@ namespace Transportation
         {
             InitializeComponent();
 
-            //dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            //dataGridView1.AllowUserToAddRows = false;
-
-            //using (SqlConnection connection = new SqlConnection(connectionString))
-            //{
-            //    connection.Open();
-            //    adapter = new SqlDataAdapter(sql, connection);
-
-            //    ds = new DataSet();
-            //    adapter.Fill(ds);
-            //    dataGridView1.DataSource = ds.Tables[0];
-            //    // делаем недоступным столбец id для изменения
-            //    dataGridView1.Columns["IDFiz"].ReadOnly = true;
-
-            //    //for (int i = 0; i <= dataGridView1.Columns.Count - 1; i++)
-            //    //{
-            //    //    dataGridView1.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            //    //}
             
             var table = new TableForm();
             //add.@Note = note;
             table.ShowDialog();
 
-            //}
+           
 
 
 
 
 
-
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
 
         }
 

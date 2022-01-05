@@ -88,5 +88,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TransportDB\TransportDB.csproj">
+      <Project>{f9e67384-7d78-4290-8ff8-18d0090e4615}</Project>
+      <Name>TransportDB</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
