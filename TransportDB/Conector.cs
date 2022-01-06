@@ -24,7 +24,7 @@ namespace TransportDB
         private SqlDataAdapter _adapter;
 
         /// <summary>
-        /// 
+        /// SqlCommandBuilder
         /// </summary>
         private SqlCommandBuilder _commandBuilder;
 
@@ -33,6 +33,9 @@ namespace TransportDB
         /// </summary>
         private string _connectionString = @"Persist Security Info=False;User ID=sqlUser;Password=123;Initial Catalog=TransportnoyeAgentstvo;Network Address=192.168.0.2";
 
+        /// <summary>
+        /// SqlConnection
+        /// </summary>
         private SqlConnection _connection;
 
         /// <summary>
@@ -68,6 +71,9 @@ namespace TransportDB
             get { return _ds; }
         }
 
+        /// <summary>
+        /// Запрос 1 к Fiz и Recipient с cube
+        /// </summary>
         public DataSet SelectFizRecipient
         {
             get
@@ -81,6 +87,9 @@ namespace TransportDB
             }
         }
 
+        /// <summary>
+        /// Запрос 2 к Fiz и Sender с rollup
+        /// </summary>
         public DataSet SelectFizSender
         {
             get
@@ -94,6 +103,11 @@ namespace TransportDB
             }
         }
 
+        /// <summary>
+        /// Запрос 3, обращение к таблицам Fiz и Sender, поиск по фамилии
+        /// </summary>
+        /// <param name="surnames"></param>
+        /// <returns>DataSet</returns>
         public DataSet SelectFizSender2(string surnames)
         {
             string _sql = $"select * from Fiz F left join Sender S " +
@@ -104,6 +118,13 @@ namespace TransportDB
             return _ds;
         }
 
+        /// <summary>
+        /// Метод для запроса 4, к таблицам Employee и AcceptanceOrders
+        /// </summary>
+        /// <param name="surnames">Фамилия</param>
+        /// <param name="name">Имя</param>
+        /// <param name="patronymic">Отчество</param>
+        /// <returns>Dataset</returns>
         public DataSet SelectEmployeeAcceptanceOrders(string surnames, string name, string patronymic)
         {
             string _sql = $"select * from Employee E left join AcceptanceOrders A ON A.IDEmployee = E.IDEmployee" +
@@ -114,6 +135,10 @@ namespace TransportDB
             return _ds;
         }
 
+        /// <summary>
+        /// Метод для сохранения изменений в таблицу
+        /// </summary>
+        /// <param name="entitie">Название талбицы из листа</param>
         public void SaveInformation(ListEntities entitie)
         {
             _commandBuilder = new SqlCommandBuilder(_adapter);

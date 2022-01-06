@@ -18,8 +18,6 @@ namespace Transportation
 
         public ListEntities Table { get; set; }
 
-        //private DataSet _ds;
-
         public MainForm()
         {
             InitializeComponent();
@@ -34,29 +32,24 @@ namespace Transportation
             }
             Table = ListEntities.Fiz;
             TableComboBox.SelectedItem = ListEntities.Fiz;
-            //_conector.Conect(Table);
-            //dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            //dataGridView1.AllowUserToAddRows = false;
-            //dataGridView1.DataSource = _conector.SelectInformation.Tables[0];
-            //// делаем недоступным столбец id для изменения
-            //if (_conector.IdTableDicionary.ContainsKey(Table.ToString()))
-            //{
-            //    dataGridView1.Columns[$"{_conector.IdTableDicionary[Table.ToString()]}"].ReadOnly = true;
-            //}
-
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
+        /// <summary>
+        /// Кнопка для добавления строки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addButton_Click(object sender, EventArgs e)
         {
             DataRow row = _conector.SelectInformation.Tables[0].NewRow(); // добавляем новую строку в DataTable
             _conector.SelectInformation.Tables[0].Rows.Add(row);
         }
 
+        /// <summary>
+        /// Кнопка для удаления строки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void deleteButton_Click(object sender, EventArgs e)
         {
             foreach (DataGridViewRow row in dataGridView1.SelectedRows)
@@ -65,11 +58,21 @@ namespace Transportation
             }
         }
 
+        /// <summary>
+        /// Кнопка для сохранения изменений
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveButton_Click(object sender, EventArgs e)
         {
             _conector.SaveInformation(Table);
         }
 
+        /// <summary>
+        /// ComboBox для выбора таблицы, с которой будет происходить работа
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TableComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (TableComboBox.SelectedIndex == -1)
@@ -88,6 +91,11 @@ namespace Transportation
             }
         }
 
+        /// <summary>
+        /// Запрос 1 к Fiz и Recipient с cube
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SelectFizRecipientButton_Click(object sender, EventArgs e)
         {
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -95,6 +103,11 @@ namespace Transportation
             dataGridView1.DataSource = _conector.SelectFizRecipient.Tables[0];
         }
 
+        /// <summary>
+        /// Запрос 2 к Fiz и Sender с rollup
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SelectFizSenderButton_Click(object sender, EventArgs e)
         {
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -102,6 +115,11 @@ namespace Transportation
             dataGridView1.DataSource = _conector.SelectFizSender.Tables[0];
         }
 
+        /// <summary>
+        /// Запрос 3, обращение к таблицам Fiz и Sender, поиск по фамилии
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FizSender2Button_Click(object sender, EventArgs e)
         {
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -109,6 +127,11 @@ namespace Transportation
             dataGridView1.DataSource = _conector.SelectFizSender2(FizSender2TextBox.Text).Tables[0];
         }
 
+        /// <summary>
+        /// Метод для запроса 4, к таблицам Employee и AcceptanceOrders
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SelectEmployeeAcceptanceOrdersButton_Click(object sender, EventArgs e)
         {
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
