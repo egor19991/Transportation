@@ -1,4 +1,4 @@
-----Физическое лицо
+----Р¤РёР·РёС‡РµСЃРєРѕРµ Р»РёС†Рѕ
 CREATE PROCEDURE [dbo].[sp_Fiz]
     --@name nvarchar(50),
     --@age int,
@@ -17,7 +17,7 @@ AS
     SET @ID=SCOPE_IDENTITY()
 GO
 
---Юридеческое лицо
+--Р®СЂРёРґРµС‡РµСЃРєРѕРµ Р»РёС†Рѕ
 CREATE PROCEDURE [dbo].[sp_Entity]
 	@ID int out,
     @namesOrganization char(100),
@@ -35,7 +35,7 @@ AS
     SET @ID=SCOPE_IDENTITY()
 GO
 
---Маршрут
+--РњР°СЂС€СЂСѓС‚
 CREATE PROCEDURE [dbo].[sp_Route]
 	@ID int out,
     @pointDeparture char(70),
@@ -48,7 +48,7 @@ AS
     SET @ID=SCOPE_IDENTITY()
 GO
 
---Сотрудник
+--РЎРѕС‚СЂСѓРґРЅРёРє
 CREATE PROCEDURE [dbo].[sp_Employee]
 	@ID int out,
     @surnames char(30),
@@ -66,7 +66,7 @@ AS
     SET @ID=SCOPE_IDENTITY()
 GO
 
---Вид груза
+--Р’РёРґ РіСЂСѓР·Р°
 CREATE PROCEDURE [dbo].[sp_CargoType]
 	@ID int out,
     @cargoType char(70)
@@ -77,7 +77,7 @@ AS
     SET @ID=SCOPE_IDENTITY()
 GO
 
---Транспортное средство
+--РўСЂР°РЅСЃРїРѕСЂС‚РЅРѕРµ СЃСЂРµРґСЃС‚РІРѕ
 CREATE PROCEDURE [dbo].[sp_Vehicle]
 	@ID int out,
     @IDTypeCargo int,
@@ -91,7 +91,7 @@ AS
     SET @ID=SCOPE_IDENTITY()
 GO
 
---Рейс
+--Р РµР№СЃ
 CREATE PROCEDURE [dbo].[sp_Flight]
 	@ID int out,
     @IDVehicle int,
@@ -105,7 +105,7 @@ AS
     SET @ID=SCOPE_IDENTITY()
 GO
 
---Тариф
+--РўР°СЂРёС„
 CREATE PROCEDURE [dbo].[sp_Rate]
 	@ID int out,
     @IDTypeCargo int,
@@ -118,7 +118,7 @@ AS
     SET @ID=SCOPE_IDENTITY()
 GO
 
---Заказ
+--Р—Р°РєР°Р·
 CREATE PROCEDURE [dbo].[sp_Orders]
 	@ID int out,
     @IDTypeCargo int,
@@ -134,7 +134,7 @@ AS
     SET @ID=SCOPE_IDENTITY()
 GO
 
---ЗаказРейс
+--Р—Р°РєР°Р·Р РµР№СЃ
 CREATE PROCEDURE [dbo].[sp_RateFlight]
 	@IDRate int,
 	@IDOrders int 
@@ -143,7 +143,7 @@ AS
     VALUES (@IDRate,@IDOrders)
 GO
 
---Выдача заказа
+--Р’С‹РґР°С‡Р° Р·Р°РєР°Р·Р°
 CREATE PROCEDURE [dbo].[sp_IssueOrders]
 	@IDEmployee int,
 	@IDOrders int
@@ -152,7 +152,7 @@ AS
     VALUES (@IDEmployee, @IDOrders)
 GO
 
---Прием заказа
+--РџСЂРёРµРј Р·Р°РєР°Р·Р°
 CREATE PROCEDURE [dbo].[sp_AcceptanceOrders]
 	@IDEmployee int,
 	@IDOrders int
@@ -161,7 +161,7 @@ AS
     VALUES (@IDEmployee, @IDOrders)
 GO
 
---Отправитель
+--РћС‚РїСЂР°РІРёС‚РµР»СЊ
 CREATE PROCEDURE [dbo].[sp_Sender]
 	@IDFiz int ,
 	@IDEntitys int ,
@@ -171,7 +171,7 @@ AS
     VALUES (@IDFiz, @IDEntitys, @IDOrders)
 GO
 
---Получатель
+--РџРѕР»СѓС‡Р°С‚РµР»СЊ
 CREATE PROCEDURE [dbo].[sp_Recipient]
 	@IDFiz int ,
 	@IDEntitys int ,
