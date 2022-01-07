@@ -1,0 +1,14 @@
+DROP TABLE Recipient;
+DROP TABLE Sender;
+DROP TABLE AcceptanceOrders;
+DROP TABLE IssueOrders;
+DROP TABLE RateFlight;
+DROP TABLE Orders;
+DROP TABLE Rate;
+DROP TABLE Flight;
+DROP TABLE Vehicle;
+DROP TABLE CargoType;
+DROP TABLE Employee;
+DROP TABLE Route;
+DROP TABLE Entity;
+DROP TABLE Fiz;
