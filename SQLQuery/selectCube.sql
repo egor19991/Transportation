@@ -1,4 +1,4 @@
-select R.IDFiz,F.Surnames,F.Names, COUNT(*) as NumberItems
-from Recipient R
-inner join Fiz F ON F.IDFiz = R.IDFiz
-group by cube(R.IDFiz,F.Surnames,F.Names) ;
+select F.IDClient,F.Surnames,F.Names, COUNT(*) as NumberItems
+from  Fiz F
+inner join Orders O ON O.IDRecipient = F.IDClient
+group by cube(F.IDClient,F.Surnames,F.Names) ;

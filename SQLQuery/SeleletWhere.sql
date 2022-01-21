@@ -1,4 +1,4 @@
-select *
-from Fiz F
-left join Sender S ON S.IDFiz = F.IDFiz
-WHERE F.Surnames = '≈вец' ;
+select R.LoadDensity, O.ShippingAddress, O.DeliveryAddress
+from Rate R
+left join Orders O ON O.IDRate = R.IDRate
+Group BY rollup (R.LoadDensity, O.ShippingAddress, O.DeliveryAddress)

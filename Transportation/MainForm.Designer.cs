@@ -39,7 +39,6 @@ namespace Transportation
             this.panel1 = new System.Windows.Forms.Panel();
             this.SelectFizRecipientButton = new System.Windows.Forms.Button();
             this.SelectFizSenderButton = new System.Windows.Forms.Button();
-            this.FizSender2TextBox = new System.Windows.Forms.TextBox();
             this.FizSender2Button = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.SelectEmployeeAcceptanceOrdersButton = new System.Windows.Forms.Button();
@@ -158,18 +157,10 @@ namespace Transportation
             this.SelectFizSenderButton.UseVisualStyleBackColor = true;
             this.SelectFizSenderButton.Click += new System.EventHandler(this.SelectFizSenderButton_Click);
             // 
-            // FizSender2TextBox
-            // 
-            this.FizSender2TextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.FizSender2TextBox.Location = new System.Drawing.Point(500, 428);
-            this.FizSender2TextBox.Name = "FizSender2TextBox";
-            this.FizSender2TextBox.Size = new System.Drawing.Size(100, 20);
-            this.FizSender2TextBox.TabIndex = 9;
-            // 
             // FizSender2Button
             // 
             this.FizSender2Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.FizSender2Button.Location = new System.Drawing.Point(500, 457);
+            this.FizSender2Button.Location = new System.Drawing.Point(497, 426);
             this.FizSender2Button.Name = "FizSender2Button";
             this.FizSender2Button.Size = new System.Drawing.Size(100, 23);
             this.FizSender2Button.TabIndex = 10;
@@ -258,7 +249,6 @@ namespace Transportation
             this.ClientSize = new System.Drawing.Size(884, 591);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.FizSender2Button);
-            this.Controls.Add(this.FizSender2TextBox);
             this.Controls.Add(this.SelectFizSenderButton);
             this.Controls.Add(this.SelectFizRecipientButton);
             this.Controls.Add(this.panel1);
@@ -274,7 +264,6 @@ namespace Transportation
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -289,7 +278,6 @@ namespace Transportation
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button SelectFizRecipientButton;
         private System.Windows.Forms.Button SelectFizSenderButton;
-        private System.Windows.Forms.TextBox FizSender2TextBox;
         private System.Windows.Forms.Button FizSender2Button;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button SelectEmployeeAcceptanceOrdersButton;

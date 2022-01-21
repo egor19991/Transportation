@@ -30,7 +30,6 @@ namespace Transportation
             {
                 TableComboBox.Items.Add(tablelist);
             }
-            Table = ListEntities.Fiz;
             TableComboBox.SelectedItem = ListEntities.Fiz;
         }
 
@@ -124,7 +123,7 @@ namespace Transportation
         {
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.DataSource = _conector.SelectFizSender2(FizSender2TextBox.Text).Tables[0];
+            dataGridView1.DataSource = _conector.SelectFizSender2.Tables[0];
         }
 
         /// <summary>

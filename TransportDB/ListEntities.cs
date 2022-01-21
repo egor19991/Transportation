@@ -12,10 +12,6 @@ namespace TransportDB
     /// </summary>
     public enum ListEntities
     {
-        Recipient,
-        Sender,
-        AcceptanceOrders,
-        IssueOrders,
         RateFlight,
         Orders,
         Rate,
@@ -25,6 +21,7 @@ namespace TransportDB
         Employee,
         Route,
         Entity,
-        Fiz
+        Fiz,
+        Client
     }
 }

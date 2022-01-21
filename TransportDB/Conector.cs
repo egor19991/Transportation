@@ -78,8 +78,9 @@ namespace TransportDB
         {
             get
             {
-                string _sql = $"select R.IDFiz,F.Surnames,F.Names, COUNT(*) as NumberItems from Recipient" +
-                    $" R inner join Fiz F ON F.IDFiz = R.IDFiz group by cube(R.IDFiz, F.Surnames, F.Names)";
+                string _sql = $"select F.IDClient,F.Surnames,F.Names, " +
+                    $"COUNT(*) as NumberItems from Fiz F inner join Orders O" +
+                    $" ON O.IDRecipient = F.IDClient group by cube(F.IDClient, F.Surnames, F.Names); ";
                 _adapter = new SqlDataAdapter(_sql, _connection);
                 _ds = new DataSet();
                 _adapter.Fill(_ds);
@@ -94,8 +95,9 @@ namespace TransportDB
         {
             get
             {
-                string _sql = $"select S.IDFiz,F.Surnames,F.Names, COUNT(*) as NumberItems from Sender S " +
-                    $"inner join Fiz F ON F.IDFiz = S.IDFiz group by rollup(S.IDFiz,F.Surnames,F.Names)";
+                string _sql = $"select F.IDClient,F.Surnames,F.Names, COUNT(*) as NumberItems " +
+                    $"from Orders O inner join Fiz F ON F.IDClient = O.IDSender" +
+                    $"  group by rollup(F.IDClient, F.Surnames, F.Names); ";
                 _adapter = new SqlDataAdapter(_sql, _connection);
                 _ds = new DataSet();
                 _adapter.Fill(_ds);
@@ -108,14 +110,19 @@ namespace TransportDB
         /// </summary>
         /// <param name="surnames"></param>
         /// <returns>DataSet</returns>
-        public DataSet SelectFizSender2(string surnames)
+        public DataSet SelectFizSender2
         {
-            string _sql = $"select * from Fiz F left join Sender S " +
-                $"ON S.IDFiz = F.IDFiz WHERE F.Surnames = '{surnames}'";
-            _adapter = new SqlDataAdapter(_sql, _connection);
-            _ds = new DataSet();
-            _adapter.Fill(_ds);
-            return _ds;
+            
+            get
+            {
+                string _sql = $"select R.LoadDensity, O.ShippingAddress, O.DeliveryAddress from Rate R " +
+                $"left join Orders O ON O.IDRate = R.IDRate Group BY" +
+                $" rollup(R.LoadDensity, O.ShippingAddress, O.DeliveryAddress)";
+                _adapter = new SqlDataAdapter(_sql, _connection);
+                _ds = new DataSet();
+                _adapter.Fill(_ds);
+                return _ds;
+            }
         }
 
         /// <summary>
@@ -127,7 +134,7 @@ namespace TransportDB
         /// <returns>Dataset</returns>
         public DataSet SelectEmployeeAcceptanceOrders(string surnames, string name, string patronymic)
         {
-            string _sql = $"select * from Employee E left join AcceptanceOrders A ON A.IDEmployee = E.IDEmployee" +
+            string _sql = $"select *from Employee E left join Orders O ON O.IDEmployeeRegistration = E.IDEmployee" +
                 $" WHERE (E.Surnames = '{surnames}') and (E.Names = '{name}') and (E.Patronymic = '{patronymic}')";
             _adapter = new SqlDataAdapter(_sql, _connection);
             _ds = new DataSet();
@@ -144,6 +151,15 @@ namespace TransportDB
             _commandBuilder = new SqlCommandBuilder(_adapter);
             switch (entitie)
             {
+                case ListEntities.Client:
+                    {
+                        _adapter.InsertCommand = new SqlCommand("sp_Client", _connection);
+                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0, "IDClient");
+                        parameter.Direction = ParameterDirection.Output;
+                        _adapter.Update(_ds);
+                        break;
+                    }
                 case ListEntities.Fiz:
                     {
                         _adapter.InsertCommand = new SqlCommand("sp_Fiz", _connection);
@@ -154,8 +170,8 @@ namespace TransportDB
                         _adapter.InsertCommand.Parameters.Add(new SqlParameter("@phoneNumber", SqlDbType.Char, 11, "PhoneNumber"));
                         _adapter.InsertCommand.Parameters.Add(new SqlParameter("@residenceAddress", SqlDbType.Char, 100, "ResidenceAddress"));
                         _adapter.InsertCommand.Parameters.Add(new SqlParameter("@seriesPassportNumber", SqlDbType.Char, 10, "SeriesPassportNumber"));
-                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0, "IDFiz");
-                        parameter.Direction = ParameterDirection.Output;
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0, "IDClient");
+                       parameter.Direction = ParameterDirection.Output;
                         _adapter.Update(_ds);
                         break;
                     }
@@ -171,7 +187,7 @@ namespace TransportDB
                         _adapter.InsertCommand.Parameters.Add(new SqlParameter("@BIK", SqlDbType.Char, 9, "BIK"));
                         _adapter.InsertCommand.Parameters.Add(new SqlParameter("@paymentAccount", SqlDbType.Char, 20, "PaymentAccount"));
                         _adapter.InsertCommand.Parameters.Add(new SqlParameter("@corporateAccount", SqlDbType.Char, 20, "CorporateAccount"));
-                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0, "IDEntitys");
+                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int, 0, "IDClient"));
                         parameter.Direction = ParameterDirection.Output;
                         _adapter.Update(_ds);
                         break;
@@ -256,13 +272,16 @@ namespace TransportDB
                 case ListEntities.Orders:
                     {
                         _adapter.InsertCommand = new SqlCommand("sp_Orders", _connection);
-                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
-                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDTypeCargo", SqlDbType.Int, 0, "IDTypeCargo"));
+                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure; 
                         _adapter.InsertCommand.Parameters.Add(new SqlParameter("@cargoVolume", SqlDbType.Float, 0, "CargoVolume"));
                         _adapter.InsertCommand.Parameters.Add(new SqlParameter("@cargoWeight", SqlDbType.Float, 0, "CargoWeight"));
                         _adapter.InsertCommand.Parameters.Add(new SqlParameter("@shippingAddress", SqlDbType.Char, 100, "ShippingAddress"));
                         _adapter.InsertCommand.Parameters.Add(new SqlParameter("@deliveryAddress", SqlDbType.Char, 100, "DeliveryAddress"));
                         _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDRate", SqlDbType.Int, 0, "IDRate"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDSender", SqlDbType.Int, 0, "IDSender"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDRecipient", SqlDbType.Int, 0, "IDRecipient"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDEmployeeRegistration", SqlDbType.Int, 0, "IDEmployeeRegistration"));
+                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDEmployeeExtradition", SqlDbType.Int, 0, "IDEmployeeExtradition"));
                         SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@ID", SqlDbType.Int, 0, "IDOrders");
                         parameter.Direction = ParameterDirection.Output;
                         _adapter.Update(_ds);
@@ -273,44 +292,6 @@ namespace TransportDB
                         _adapter.InsertCommand = new SqlCommand("sp_RateFlight", _connection);
                         _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
                         _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDRate", SqlDbType.Int, 0, "IDRate"));
-                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@IDOrders", SqlDbType.Int, 0, "IDRate");
-                        _adapter.Update(_ds);
-                        break;
-                    }
-                case ListEntities.IssueOrders:
-                    {
-                        _adapter.InsertCommand = new SqlCommand("sp_IssueOrders", _connection);
-                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
-                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDEmployee", SqlDbType.Int, 0, "IDEmployee"));
-                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@IDOrders", SqlDbType.Int, 0, "IDRate");
-                        _adapter.Update(_ds);
-                        break;
-                    }
-                case ListEntities.AcceptanceOrders:
-                    {
-                        _adapter.InsertCommand = new SqlCommand("sp_AcceptanceOrders", _connection);
-                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
-                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDEmployee", SqlDbType.Int, 0, "IDEmployee"));
-                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@IDOrders", SqlDbType.Int, 0, "IDRate");
-                        _adapter.Update(_ds);
-                        break;
-                    }
-                case ListEntities.Sender:
-                    {
-                        _adapter.InsertCommand = new SqlCommand("sp_Sender", _connection);
-                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
-                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDFiz", SqlDbType.Int, 0, "IDFiz"));
-                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDEntitys", SqlDbType.Int, 0, "IDEntitys"));
-                        SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@IDOrders", SqlDbType.Int, 0, "IDOrders");
-                        _adapter.Update(_ds);
-                        break;
-                    }
-                case ListEntities.Recipient:
-                    {
-                        _adapter.InsertCommand = new SqlCommand("sp_Recipient", _connection);
-                        _adapter.InsertCommand.CommandType = CommandType.StoredProcedure;
-                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDFiz", SqlDbType.Int, 0, "IDFiz"));
-                        _adapter.InsertCommand.Parameters.Add(new SqlParameter("@IDEntitys", SqlDbType.Int, 0, "IDEntitys"));
                         SqlParameter parameter = _adapter.InsertCommand.Parameters.Add("@IDOrders", SqlDbType.Int, 0, "IDOrders");
                         _adapter.Update(_ds);
                         break;
@@ -326,8 +307,8 @@ namespace TransportDB
         {
             _IdTableDictionary = new Dictionary<string, string>()
             {
-                {"Fiz","IDFiz" },
-                {"Entity","IDEntitys" },
+                {"Fiz","IDClient" },
+                {"Entity","IDClient" },
                 {"Route","IDRoute" },
                 {"Employee","IDEmployee" },
                 {"CargoType","IDTypeCargo" },
@@ -335,6 +316,7 @@ namespace TransportDB
                 {"Flight","IDFlight" },
                 {"Rate","IDRate" },
                 {"Orders","IDOrders" },
+                {"Client","IDClient" },
             };
         }
 

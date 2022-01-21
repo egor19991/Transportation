@@ -1,8 +1,12 @@
-----Физическое лицо
+--Клиент !!
+CREATE PROCEDURE [dbo].[sp_Client]
+	@ID int out
+AS
+    INSERT INTO Client DEFAULT VALUES 
+    SET @ID=SCOPE_IDENTITY()
+GO
+
 CREATE PROCEDURE [dbo].[sp_Fiz]
-    --@name nvarchar(50),
-    --@age int,
-    --@Id int out,
 	@ID int out,
     @surnames char(30),
 	@names char(30),
@@ -11,13 +15,17 @@ CREATE PROCEDURE [dbo].[sp_Fiz]
 	@residenceAddress char(100),
 	@seriesPassportNumber char(10)
 AS
-    INSERT INTO Fiz(Surnames,Names,Patronymic,PhoneNumber,ResidenceAddress, SeriesPassportNumber)
-    VALUES (@surnames,@names, @patronymic, @phoneNumber, @residenceAddress, @seriesPassportNumber)
-  
-    SET @ID=SCOPE_IDENTITY()
+	
+	INSERT INTO Client DEFAULT VALUES 
+    SET @ID=SCOPE_IDENTITY();
+
+    INSERT INTO Fiz(IDClient,Surnames,Names,Patronymic,PhoneNumber,ResidenceAddress, SeriesPassportNumber)
+    VALUES (@ID,@surnames,@names, @patronymic, @phoneNumber, @residenceAddress, @seriesPassportNumber)
+
+	--SET @IDClient=SCOPE_IDENTITY()
 GO
 
---Юридеческое лицо
+--Юридеческое лицо !!
 CREATE PROCEDURE [dbo].[sp_Entity]
 	@ID int out,
     @namesOrganization char(100),
@@ -28,11 +36,12 @@ CREATE PROCEDURE [dbo].[sp_Entity]
 	@BIK char(9),
 	@paymentAccount char(20),
 	@corporateAccount char(20)
-AS
-    INSERT INTO Entity(NamesOrganization,LegalAddress,INN,KPP,NamesBank,BIK,PaymentAccount,CorporateAccount)
-    VALUES (@namesOrganization,@legalAddress, @INN, @KPP, @namesBank, @BIK, @paymentAccount, @corporateAccount)
-  
-    SET @ID=SCOPE_IDENTITY()
+AS	
+	INSERT INTO Client DEFAULT VALUES 
+    SET @ID=SCOPE_IDENTITY();
+
+    INSERT INTO Entity(IDClient, NamesOrganization,LegalAddress,INN,KPP,NamesBank,BIK,PaymentAccount,CorporateAccount)
+    VALUES (@ID, @namesOrganization,@legalAddress, @INN, @KPP, @namesBank, @BIK, @paymentAccount, @corporateAccount)
 GO
 
 --Маршрут
@@ -118,18 +127,21 @@ AS
     SET @ID=SCOPE_IDENTITY()
 GO
 
---Заказ
+--Заказ !!!
 CREATE PROCEDURE [dbo].[sp_Orders]
 	@ID int out,
-    @IDTypeCargo int,
 	@cargoVolume float,
 	@cargoWeight float,
 	@shippingAddress char(100),
 	@deliveryAddress char(100),
-	@IDRate int
+	@IDRate int,
+	@IDSender int,
+	@IDRecipient int,
+	@IDEmployeeRegistration int,
+	@IDEmployeeExtradition int
 AS
-    INSERT INTO Orders(IDTypeCargo,CargoVolume,CargoWeight,ShippingAddress,DeliveryAddress,IDRate)
-    VALUES (@IDTypeCargo, @cargoVolume, @cargoWeight, @shippingAddress, @deliveryAddress, @IDRate)
+    INSERT INTO Orders(CargoVolume,CargoWeight,ShippingAddress,DeliveryAddress,IDRate, IDSender, IDRecipient, IDEmployeeRegistration,IDEmployeeExtradition)
+    VALUES (@cargoVolume, @cargoWeight, @shippingAddress, @deliveryAddress, @IDRate, @IDSender, @IDRecipient,@IDEmployeeRegistration,@IDEmployeeExtradition)
   
     SET @ID=SCOPE_IDENTITY()
 GO
@@ -141,42 +153,4 @@ CREATE PROCEDURE [dbo].[sp_RateFlight]
 AS
     INSERT INTO RateFlight(IDRate,IDOrders)
     VALUES (@IDRate,@IDOrders)
-GO
-
---Выдача заказа
-CREATE PROCEDURE [dbo].[sp_IssueOrders]
-	@IDEmployee int,
-	@IDOrders int
-AS
-    INSERT INTO IssueOrders(IDEmployee,IDOrders)
-    VALUES (@IDEmployee, @IDOrders)
-GO
-
---Прием заказа
-CREATE PROCEDURE [dbo].[sp_AcceptanceOrders]
-	@IDEmployee int,
-	@IDOrders int
-AS
-    INSERT INTO AcceptanceOrders(IDEmployee,IDOrders)
-    VALUES (@IDEmployee, @IDOrders)
-GO
-
---Отправитель
-CREATE PROCEDURE [dbo].[sp_Sender]
-	@IDFiz int ,
-	@IDEntitys int ,
-	@IDOrders int
-AS
-    INSERT INTO Sender(IDFiz,IDEntitys,IDOrders)
-    VALUES (@IDFiz, @IDEntitys, @IDOrders)
-GO
-
---Получатель
-CREATE PROCEDURE [dbo].[sp_Recipient]
-	@IDFiz int ,
-	@IDEntitys int ,
-	@IDOrders int
-AS
-    INSERT INTO Recipient(IDFiz,IDEntitys,IDOrders)
-    VALUES (@IDFiz, @IDEntitys, @IDOrders)
 GO
