@@ -64,8 +64,8 @@ namespace Transportation
         /// <param name="e"></param>
         private void saveButton_Click(object sender, EventArgs e)
         {
-            //_conector.SaveInformation(Table);
-            _conector.SaveInformation(Svin);
+            _conector.SaveInformation(Table);
+            //_conector.SaveInformation(Svin);
         }
 
         /// <summary>
